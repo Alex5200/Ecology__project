@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { NoMatch } from "./no-match";
+import About from "./routes/about";
+import Home from "./routes/Home";
+export default function HomeApp() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+function Layout() {
+  return (
+    <div>
+      <h1>Welcome to the Home app!</h1>
+
+      <p>
+        This example demonstrates how you can stitch two React Router apps
+        together using the <code>`basename`</code> prop on{" "}
+        <code>`BrowserRouter`</code> and <code>`StaticRouter`</code>.
+      </p>
+
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            {/* Use a normal <a> when linking to the "Inbox" app so the browser
+                does a full document reload, which is what we want when exiting
+                this app and entering another so we execute its entry point in
+                inbox/main.jsx. */}
+            <a href="/inbox">Inbox</a>
+          </li>
+        </ul>
+      </nav>
+
+      <hr />
+
+      <Outlet />
+    </div>
+  );
+}
